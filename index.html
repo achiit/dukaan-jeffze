@@ -1,0 +1,1086 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CRAVE — High-Octane Street Bites</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Font Awesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- Google Fonts: Space Grotesk & Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800;900&family=Syne:wght@700;800;900&display=swap" rel="stylesheet">
+
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              orange: '#FF5E1E',
+              flame: '#FF2A00',
+              lime: '#22E58B',
+              yellow: '#FFC837',
+              dark: '#0C0C0E',
+              card: '#16161A',
+              border: '#26262E'
+            }
+          },
+          fontFamily: {
+            syne: ['Syne', 'sans-serif'],
+            body: ['"Plus Jakarta Sans"', 'sans-serif'],
+          },
+          animation: {
+            'spin-slow': 'spin 18s linear infinite',
+            'float': 'float 3.5s ease-in-out infinite',
+            'pulse-fast': 'pulse 1.2s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+          },
+          keyframes: {
+            float: {
+              '0%, 100%': { transform: 'translateY(0px) rotate(0deg)' },
+              '50%': { transform: 'translateY(-10px) rotate(2deg)' },
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background-color: #0C0C0E;
+      color: #F3F4F6;
+      overflow-x: hidden;
+    }
+    .font-display {
+      font-family: 'Syne', sans-serif;
+    }
+    .neon-glow-orange {
+      box-shadow: 0 0 40px -10px rgba(255, 94, 30, 0.45);
+    }
+    .neon-glow-lime {
+      box-shadow: 0 0 35px -8px rgba(34, 229, 139, 0.35);
+    }
+    .glass-nav {
+      background: rgba(12, 12, 14, 0.85);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+    }
+    .glass-card {
+      background: linear-gradient(135deg, rgba(26, 26, 33, 0.85) 0%, rgba(18, 18, 22, 0.95) 100%);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(12px);
+    }
+    .glass-card:hover {
+      border-color: rgba(255, 94, 30, 0.4);
+      transform: translateY(-4px);
+    }
+    /* Hide scrollbars */
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .no-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+  </style>
+</head>
+<body class="selection:bg-brand-orange selection:text-white">
+
+  <!-- TOP TOAST NOTIFICATION -->
+  <div id="toast" class="fixed bottom-6 right-6 z-50 transform translate-y-24 opacity-0 transition-all duration-300 flex items-center gap-3 px-5 py-3.5 rounded-2xl bg-brand-orange text-white font-bold shadow-2xl pointer-events-none">
+    <i class="fa-solid fa-fire-burner text-xl"></i>
+    <span id="toast-msg">Item added to cart!</span>
+  </div>
+
+  <!-- NAVIGATION HEADER -->
+  <header class="fixed top-0 left-0 right-0 z-40 glass-nav border-b border-brand-border/60 transition-all duration-300">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+      
+      <!-- LOGO -->
+      <a href="#" class="flex items-center gap-2 group">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-brand-flame to-brand-orange flex items-center justify-center font-display font-extrabold text-white text-2xl shadow-lg shadow-brand-orange/30 group-hover:scale-105 transition-transform">
+          ⚡
+        </div>
+        <div class="flex flex-col">
+          <span class="font-display font-black text-2xl tracking-tighter text-white">CRAVE<span class="text-brand-orange">.</span></span>
+          <span class="text-[10px] tracking-widest uppercase font-extrabold text-brand-lime -mt-1">CRISPY AF</span>
+        </div>
+      </a>
+
+      <!-- DESKTOP NAV -->
+      <nav class="hidden md:flex items-center gap-8 text-sm font-bold text-gray-300">
+        <a href="#menu" class="hover:text-brand-orange transition-colors">Bestsellers</a>
+        <a href="#cravebox" class="hover:text-brand-orange transition-colors flex items-center gap-1.5">
+          <span>Box Builder</span>
+          <span class="px-2 py-0.5 text-[10px] bg-brand-lime text-black rounded-full font-black uppercase">Mast</span>
+        </a>
+        <a href="#hype" class="hover:text-brand-orange transition-colors">The Hype</a>
+        <a href="#hours" class="hover:text-brand-orange transition-colors">Spots & Late-Night</a>
+      </nav>
+
+      <!-- RIGHT CTAs -->
+      <div class="flex items-center gap-3">
+        <!-- Live Status Pill -->
+        <div class="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-full bg-brand-card border border-brand-border text-xs font-semibold text-gray-300">
+          <span class="w-2 h-2 rounded-full bg-brand-lime animate-ping"></span>
+          <span>Open till 4 AM</span>
+        </div>
+
+        <!-- Cart Button -->
+        <button onclick="toggleCart()" class="relative p-3 rounded-xl bg-brand-card border border-brand-border text-white hover:border-brand-orange transition-all">
+          <i class="fa-solid fa-bag-shopping text-lg"></i>
+          <span id="cart-counter" class="absolute -top-1.5 -right-1.5 w-5 h-5 bg-brand-orange text-white text-xs font-black rounded-full flex items-center justify-center shadow-lg">0</span>
+        </button>
+
+        <!-- CTA Order -->
+        <a href="#menu" class="hidden sm:inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-brand-flame to-brand-orange text-white text-sm font-extrabold hover:shadow-lg hover:shadow-brand-orange/30 active:scale-95 transition-all">
+          <span>Order Now</span>
+          <i class="fa-solid fa-arrow-right text-xs"></i>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- CART SLIDEOUT DRAWER -->
+  <div id="cart-drawer-overlay" onclick="toggleCart()" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 hidden opacity-0 transition-opacity duration-300"></div>
+  <aside id="cart-drawer" class="fixed top-0 right-0 h-full w-full max-w-md bg-brand-dark border-l border-brand-border z-50 transform translate-x-full transition-transform duration-300 flex flex-col">
+    <!-- Cart Header -->
+    <div class="p-6 border-b border-brand-border flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <i class="fa-solid fa-fire text-brand-orange text-xl"></i>
+        <h3 class="font-display font-extrabold text-xl text-white">Your Munch Stack</h3>
+      </div>
+      <button onclick="toggleCart()" class="p-2 text-gray-400 hover:text-white rounded-lg">
+        <i class="fa-solid fa-xmark text-lg"></i>
+      </button>
+    </div>
+
+    <!-- Cart Items List -->
+    <div id="cart-items" class="flex-1 overflow-y-auto p-6 space-y-4">
+      <div id="cart-empty" class="h-full flex flex-col items-center justify-center text-center text-gray-500 py-16">
+        <div class="text-6xl mb-4">🌮</div>
+        <p class="font-bold text-lg text-gray-400">Your bag is starving!</p>
+        <p class="text-xs text-gray-600 mt-1">Add some sizzling smash burgers or loaded tacos.</p>
+      </div>
+    </div>
+
+    <!-- Cart Footer -->
+    <div class="p-6 border-t border-brand-border bg-brand-card/50">
+      <div class="flex justify-between items-center mb-2 text-sm text-gray-400">
+        <span>Subtotal</span>
+        <span id="cart-subtotal" class="font-bold text-white">₹0</span>
+      </div>
+      <div class="flex justify-between items-center mb-5 text-sm text-gray-400">
+        <span class="flex items-center gap-1.5 text-brand-lime font-bold">
+          <i class="fa-solid fa-bolt"></i> Express Delivery (15-20m)
+        </span>
+        <span class="text-brand-lime font-bold uppercase">Free</span>
+      </div>
+      <div class="flex justify-between items-baseline mb-6 border-t border-brand-border/60 pt-4">
+        <span class="font-display font-black text-lg text-white">Total Amount</span>
+        <span id="cart-total" class="font-display font-black text-2xl text-brand-orange">₹0</span>
+      </div>
+      <button onclick="checkoutMock()" class="w-full py-4 rounded-xl bg-gradient-to-r from-brand-orange to-brand-flame text-white font-extrabold uppercase tracking-wider flex items-center justify-center gap-3 shadow-lg shadow-brand-orange/30 hover:brightness-110 active:scale-95 transition-all">
+        <span>Slide to Checkout</span>
+        <i class="fa-solid fa-arrow-right"></i>
+      </button>
+    </div>
+  </aside>
+
+  <!-- MAIN HERO SECTION -->
+  <section class="relative pt-32 pb-20 md:pt-40 md:pb-28 overflow-hidden">
+    <!-- Ambient Glow Blobs -->
+    <div class="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[550px] h-[550px] bg-brand-orange/15 rounded-full blur-[140px] pointer-events-none"></div>
+    <div class="absolute top-1/3 -right-20 w-[350px] h-[350px] bg-brand-lime/10 rounded-full blur-[120px] pointer-events-none"></div>
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+        
+        <!-- Hero Text -->
+        <div class="lg:col-span-7 space-y-6 text-center lg:text-left">
+          
+          <!-- Punchy Pill -->
+          <div class="inline-flex items-center gap-2.5 px-4 py-2 rounded-full bg-brand-card/80 border border-brand-border text-xs font-black tracking-wide text-white">
+            <span class="text-brand-orange">⚡ HIGH-OCTANE CRUNCH</span>
+            <span class="text-gray-500">•</span>
+            <span class="text-brand-lime">ZERO SOGGY FRIES</span>
+          </div>
+
+          <!-- Headline -->
+          <h1 class="font-display font-black text-4xl sm:text-6xl md:text-7xl leading-[1.05] tracking-tight uppercase">
+            No Boring Meals.<br>
+            <span class="text-transparent bg-clip-text bg-gradient-to-r from-brand-orange via-brand-yellow to-brand-lime">
+              Pure Crispy Sizzle.
+            </span>
+          </h1>
+
+          <p class="text-gray-300 text-base sm:text-xl font-normal max-w-xl mx-auto lg:mx-0">
+            Smash burgers with 45-day aged crust, fiery Birria tacos dripping with consommé, and triple-dusted waffle fries. Dropping fresh in 15 mins.
+          </p>
+
+          <!-- Action CTA Row -->
+          <div class="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 pt-2">
+            <a href="#menu" class="w-full sm:w-auto px-8 py-4 rounded-2xl bg-gradient-to-r from-brand-orange to-brand-flame text-white font-extrabold text-base shadow-xl shadow-brand-orange/30 hover:scale-105 active:scale-95 transition-all text-center flex items-center justify-center gap-3">
+              <span>EXPLORE THE SIZZLE</span>
+              <i class="fa-solid fa-burger"></i>
+            </a>
+            <a href="#cravebox" class="w-full sm:w-auto px-8 py-4 rounded-2xl bg-brand-card border border-brand-border text-white font-bold text-base hover:border-brand-lime hover:text-brand-lime transition-all text-center flex items-center justify-center gap-2">
+              <i class="fa-solid fa-sliders text-brand-lime"></i>
+              <span>Crave Box Maker</span>
+            </a>
+          </div>
+
+          <!-- Social Proof Badges -->
+          <div class="pt-6 border-t border-brand-border/60 flex flex-wrap items-center justify-center lg:justify-start gap-8 text-xs font-bold text-gray-400">
+            <div class="flex items-center gap-2">
+              <div class="flex -space-x-2">
+                <span class="w-8 h-8 rounded-full bg-brand-orange flex items-center justify-center text-white font-black text-xs border-2 border-brand-dark">🔥</span>
+                <span class="w-8 h-8 rounded-full bg-brand-yellow flex items-center justify-center text-black font-black text-xs border-2 border-brand-dark">🌶️</span>
+                <span class="w-8 h-8 rounded-full bg-brand-lime flex items-center justify-center text-black font-black text-xs border-2 border-brand-dark">⚡</span>
+              </div>
+              <div>
+                <p class="text-white font-black text-sm">4,820+ Munchies</p>
+                <p class="text-gray-500 text-[11px]">Slapped today</p>
+              </div>
+            </div>
+
+            <div class="h-8 w-px bg-brand-border hidden sm:block"></div>
+
+            <div class="flex items-center gap-2">
+              <div class="w-9 h-9 rounded-xl bg-brand-card border border-brand-border flex items-center justify-center text-brand-yellow text-sm">
+                <i class="fa-solid fa-star"></i>
+              </div>
+              <div>
+                <p class="text-white font-black text-sm">4.9 / 5.0 Star Hype</p>
+                <p class="text-gray-500 text-[11px]">Over 12,000 foodies</p>
+              </div>
+            </div>
+
+            <div class="h-8 w-px bg-brand-border hidden sm:block"></div>
+
+            <div class="flex items-center gap-2">
+              <div class="w-9 h-9 rounded-xl bg-brand-card border border-brand-border flex items-center justify-center text-brand-lime text-sm">
+                <i class="fa-solid fa-stopwatch"></i>
+              </div>
+              <div>
+                <p class="text-white font-black text-sm">18 Min Avg.</p>
+                <p class="text-gray-500 text-[11px]">Doorstep sprint</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Hero Card & Showcase -->
+        <div class="lg:col-span-5 relative">
+          <!-- Main Visual Showcase Card -->
+          <div class="relative glass-card rounded-3xl p-6 md:p-8 neon-glow-orange border-brand-orange/40">
+            <!-- Floating Sparkle Badge -->
+            <div class="absolute -top-4 -right-4 px-4 py-1.5 rounded-full bg-brand-orange text-white font-black text-xs tracking-wider uppercase shadow-lg shadow-brand-orange/50 flex items-center gap-1.5 animate-pulse-fast">
+              <i class="fa-solid fa-fire"></i>
+              <span>Voted Best Smash</span>
+            </div>
+
+            <!-- Food Visual Preview -->
+            <div class="relative h-64 sm:h-72 w-full rounded-2xl overflow-hidden bg-gradient-to-b from-[#251A15] to-[#121216] flex items-center justify-center group">
+              <!-- Giant Animated Graphic Burger Emoji/SVG Illustration -->
+              <div class="text-9xl filter drop-shadow-[0_25px_35px_rgba(0,0,0,0.8)] animate-float transform transition-transform group-hover:scale-110">
+                🍔
+              </div>
+              <!-- Steam Indicator -->
+              <div class="absolute top-4 left-4 px-3 py-1 rounded-lg bg-black/60 backdrop-blur-md text-xs font-extrabold text-brand-lime border border-white/10">
+                ♨️ Fresh Off Plancha
+              </div>
+            </div>
+
+            <!-- Card Meta Details -->
+            <div class="mt-6 flex items-start justify-between">
+              <div>
+                <h3 class="font-display font-black text-2xl text-white">Ghost Chili Smash 2.0</h3>
+                <p class="text-gray-400 text-xs mt-1">Double Wagyu smash, melted Monterey Jack, habanero jam, brioche bun.</p>
+              </div>
+              <div class="text-right">
+                <span class="font-display font-black text-2xl text-brand-lime">₹349</span>
+                <span class="block text-[11px] text-gray-500 line-through">₹429</span>
+              </div>
+            </div>
+
+            <!-- Quick Add Action in Hero -->
+            <div class="mt-5 pt-4 border-t border-brand-border flex items-center justify-between">
+              <div class="flex items-center gap-2 text-xs font-bold text-gray-400">
+                <span class="px-2 py-0.5 rounded bg-brand-card text-brand-orange border border-brand-border">🌶️🌶️ High Sizzle</span>
+                <span>• 580 kcal</span>
+              </div>
+              <button onclick="addToCart('Ghost Chili Smash 2.0', 349, '🍔')" class="px-4 py-2.5 rounded-xl bg-brand-orange hover:bg-brand-flame text-white font-extrabold text-xs uppercase tracking-wide flex items-center gap-2 shadow-md hover:scale-105 active:scale-95 transition-all">
+                <i class="fa-solid fa-plus"></i>
+                <span>Snag One</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Floating Micro Badge Left -->
+          <div class="hidden sm:flex absolute -bottom-6 -left-6 glass-card p-3.5 rounded-2xl border-brand-border items-center gap-3 shadow-xl">
+            <div class="w-10 h-10 rounded-xl bg-brand-lime/20 text-brand-lime flex items-center justify-center text-lg font-black">
+              🥑
+            </div>
+            <div>
+              <p class="text-white text-xs font-extrabold">Avocado Truffle Fries</p>
+              <p class="text-brand-lime text-[11px] font-bold">New Drop 🔥</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- HYPE MARQUEE TICKER -->
+  <section class="py-4 bg-brand-orange overflow-hidden whitespace-nowrap border-y-2 border-black rotate-[-1deg] my-4 shadow-xl">
+    <div class="inline-flex items-center gap-8 font-display font-black text-xl md:text-2xl tracking-wider uppercase text-black">
+      <span>⚡ 100% SIZZLE, ZERO REGRET</span>
+      <span>★</span>
+      <span>CRISPY FRIES GUARANTEED HOT</span>
+      <span>★</span>
+      <span>ROHINI & CITY RAPID DELIVERY IN 18 MIN</span>
+      <span>★</span>
+      <span>DOUBLE SMASHED PATTY</span>
+      <span>★</span>
+      <span>SWEET CHILI GLAZE</span>
+      <span>★</span>
+      <span>100% SIZZLE, ZERO REGRET</span>
+      <span>★</span>
+      <span>CRISPY FRIES GUARANTEED HOT</span>
+      <span>★</span>
+    </div>
+  </section>
+
+  <!-- BESTSELLERS MENU SECTION -->
+  <section id="menu" class="py-20 md:py-28 relative">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <!-- Section Header -->
+      <div class="flex flex-col md:flex-row md:items-end justify-between mb-12">
+        <div>
+          <span class="text-brand-lime text-xs font-black tracking-widest uppercase">Crispy Curations</span>
+          <h2 class="font-display font-black text-3xl sm:text-5xl tracking-tight text-white mt-1">
+            MUNCHIES THAT HIT DIFFERENT.
+          </h2>
+        </div>
+        <p class="text-gray-400 text-sm max-w-sm mt-3 md:mt-0">
+          Crafted with crunch science: ultra-crisp batter, fire-roasted seasonings, and insane dipping sauces.
+        </p>
+      </div>
+
+      <!-- Filter Tabs -->
+      <div class="flex items-center gap-2 overflow-x-auto pb-4 no-scrollbar mb-10">
+        <button onclick="filterMenu('all', this)" class="menu-tab px-5 py-2.5 rounded-xl font-extrabold text-xs uppercase tracking-wider bg-brand-orange text-white border border-brand-orange transition-all">All Picks</button>
+        <button onclick="filterMenu('burgers', this)" class="menu-tab px-5 py-2.5 rounded-xl font-extrabold text-xs uppercase tracking-wider bg-brand-card text-gray-300 border border-brand-border hover:border-brand-orange transition-all">Smash Burgers</button>
+        <button onclick="filterMenu('tacos', this)" class="menu-tab px-5 py-2.5 rounded-xl font-extrabold text-xs uppercase tracking-wider bg-brand-card text-gray-300 border border-brand-border hover:border-brand-orange transition-all">Loaded Tacos</button>
+        <button onclick="filterMenu('fries', this)" class="menu-tab px-5 py-2.5 rounded-xl font-extrabold text-xs uppercase tracking-wider bg-brand-card text-gray-300 border border-brand-border hover:border-brand-orange transition-all">Triple Crispy Fries</button>
+        <button onclick="filterMenu('shakes', this)" class="menu-tab px-5 py-2.5 rounded-xl font-extrabold text-xs uppercase tracking-wider bg-brand-card text-gray-300 border border-brand-border hover:border-brand-orange transition-all">Shakes & Sips</button>
+      </div>
+
+      <!-- Menu Grid -->
+      <div id="menu-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+
+        <!-- Item 1: Burger -->
+        <div class="menu-item glass-card rounded-2xl p-5 flex flex-col justify-between" data-category="burgers">
+          <div>
+            <div class="relative h-44 rounded-xl bg-gradient-to-tr from-[#1E1210] to-[#2B1B18] flex items-center justify-center text-7xl mb-4 overflow-hidden group">
+              <span class="group-hover:scale-125 transition-transform duration-300">🍔</span>
+              <span class="absolute top-2 left-2 text-[10px] font-black uppercase px-2 py-0.5 rounded bg-brand-orange text-white">Chef's Pick</span>
+              <span class="absolute bottom-2 right-2 text-[10px] font-bold text-gray-400 bg-black/60 px-2 py-0.5 rounded">12 Min prep</span>
+            </div>
+            <div class="flex items-center gap-1.5 text-xs text-brand-orange font-bold mb-1">
+              <i class="fa-solid fa-pepper-hot"></i>
+              <span>Double Smashed</span>
+            </div>
+            <h3 class="font-display font-black text-lg text-white">The Umami Monster</h3>
+            <p class="text-xs text-gray-400 mt-1 line-clamp-2">Crispy lacy edges, caramelized onions, smoked garlic aioli, double cheddar.</p>
+          </div>
+          <div class="mt-5 pt-3 border-t border-brand-border flex items-center justify-between">
+            <span class="font-display font-black text-xl text-white">₹299</span>
+            <button onclick="addToCart('The Umami Monster', 299, '🍔')" class="p-2.5 rounded-xl bg-brand-card hover:bg-brand-orange text-white border border-brand-border hover:border-brand-orange active:scale-90 transition-all">
+              <i class="fa-solid fa-plus text-xs"></i>
+            </button>
+          </div>
+        </div>
+
+        <!-- Item 2: Tacos -->
+        <div class="menu-item glass-card rounded-2xl p-5 flex flex-col justify-between" data-category="tacos">
+          <div>
+            <div class="relative h-44 rounded-xl bg-gradient-to-tr from-[#1A1E14] to-[#222E1A] flex items-center justify-center text-7xl mb-4 overflow-hidden group">
+              <span class="group-hover:scale-125 transition-transform duration-300">🌮</span>
+              <span class="absolute top-2 left-2 text-[10px] font-black uppercase px-2 py-0.5 rounded bg-brand-lime text-black font-extrabold">5-Alarm Crunch</span>
+              <span class="absolute bottom-2 right-2 text-[10px] font-bold text-gray-400 bg-black/60 px-2 py-0.5 rounded">10 Min prep</span>
+            </div>
+            <div class="flex items-center gap-1.5 text-xs text-brand-lime font-bold mb-1">
+              <i class="fa-solid fa-fire"></i>
+              <span>Dipping Consommé</span>
+            </div>
+            <h3 class="font-display font-black text-lg text-white">Birria Fire Tacos (Trio)</h3>
+            <p class="text-xs text-gray-400 mt-1 line-clamp-2">Pan-seared crispy corn tortillas, shredded slow braise, oaxaca cheese pull.</p>
+          </div>
+          <div class="mt-5 pt-3 border-t border-brand-border flex items-center justify-between">
+            <span class="font-display font-black text-xl text-white">₹329</span>
+            <button onclick="addToCart('Birria Fire Tacos', 329, '🌮')" class="p-2.5 rounded-xl bg-brand-card hover:bg-brand-orange text-white border border-brand-border hover:border-brand-orange active:scale-90 transition-all">
+              <i class="fa-solid fa-plus text-xs"></i>
+            </button>
+          </div>
+        </div>
+
+        <!-- Item 3: Fries -->
+        <div class="menu-item glass-card rounded-2xl p-5 flex flex-col justify-between" data-category="fries">
+          <div>
+            <div class="relative h-44 rounded-xl bg-gradient-to-tr from-[#241C10] to-[#362710] flex items-center justify-center text-7xl mb-4 overflow-hidden group">
+              <span class="group-hover:scale-125 transition-transform duration-300">🍟</span>
+              <span class="absolute top-2 left-2 text-[10px] font-black uppercase px-2 py-0.5 rounded bg-brand-yellow text-black font-extrabold">Fan Favorite</span>
+              <span class="absolute bottom-2 right-2 text-[10px] font-bold text-gray-400 bg-black/60 px-2 py-0.5 rounded">8 Min prep</span>
+            </div>
+            <div class="flex items-center gap-1.5 text-xs text-brand-yellow font-bold mb-1">
+              <i class="fa-solid fa-cheese"></i>
+              <span>Triple Dusted</span>
+            </div>
+            <h3 class="font-display font-black text-lg text-white">Ghost Pepper Lava Fries</h3>
+            <p class="text-xs text-gray-400 mt-1 line-clamp-2">Crinkle-cut crispy fries drenched in molten liquid cheese, jalapenos, bacon bits.</p>
+          </div>
+          <div class="mt-5 pt-3 border-t border-brand-border flex items-center justify-between">
+            <span class="font-display font-black text-xl text-white">₹199</span>
+            <button onclick="addToCart('Ghost Lava Fries', 199, '🍟')" class="p-2.5 rounded-xl bg-brand-card hover:bg-brand-orange text-white border border-brand-border hover:border-brand-orange active:scale-90 transition-all">
+              <i class="fa-solid fa-plus text-xs"></i>
+            </button>
+          </div>
+        </div>
+
+        <!-- Item 4: Burger -->
+        <div class="menu-item glass-card rounded-2xl p-5 flex flex-col justify-between" data-category="burgers">
+          <div>
+            <div class="relative h-44 rounded-xl bg-gradient-to-tr from-[#1E1111] to-[#2B1414] flex items-center justify-center text-7xl mb-4 overflow-hidden group">
+              <span class="group-hover:scale-125 transition-transform duration-300">🍗</span>
+              <span class="absolute top-2 left-2 text-[10px] font-black uppercase px-2 py-0.5 rounded bg-brand-flame text-white font-extrabold">Ultra Sizzle</span>
+              <span class="absolute bottom-2 right-2 text-[10px] font-bold text-gray-400 bg-black/60 px-2 py-0.5 rounded">14 Min prep</span>
+            </div>
+            <div class="flex items-center gap-1.5 text-xs text-brand-orange font-bold mb-1">
+              <i class="fa-solid fa-drumstick-bite"></i>
+              <span>Nashville Hot</span>
+            </div>
+            <h3 class="font-display font-black text-lg text-white">Nashville Crunch Kicker</h3>
+            <p class="text-xs text-gray-400 mt-1 line-clamp-2">Deep-fried buttermilk chicken tossed in cayenne honey oil, purple slaw, dill pickles.</p>
+          </div>
+          <div class="mt-5 pt-3 border-t border-brand-border flex items-center justify-between">
+            <span class="font-display font-black text-xl text-white">₹310</span>
+            <button onclick="addToCart('Nashville Crunch Kicker', 310, '🍗')" class="p-2.5 rounded-xl bg-brand-card hover:bg-brand-orange text-white border border-brand-border hover:border-brand-orange active:scale-90 transition-all">
+              <i class="fa-solid fa-plus text-xs"></i>
+            </button>
+          </div>
+        </div>
+
+        <!-- Item 5: Tacos -->
+        <div class="menu-item glass-card rounded-2xl p-5 flex flex-col justify-between" data-category="tacos">
+          <div>
+            <div class="relative h-44 rounded-xl bg-gradient-to-tr from-[#141E1C] to-[#182F29] flex items-center justify-center text-7xl mb-4 overflow-hidden group">
+              <span class="group-hover:scale-125 transition-transform duration-300">🥑</span>
+              <span class="absolute top-2 left-2 text-[10px] font-black uppercase px-2 py-0.5 rounded bg-brand-lime text-black font-extrabold">Crispy Green</span>
+              <span class="absolute bottom-2 right-2 text-[10px] font-bold text-gray-400 bg-black/60 px-2 py-0.5 rounded">9 Min prep</span>
+            </div>
+            <div class="flex items-center gap-1.5 text-xs text-brand-lime font-bold mb-1">
+              <i class="fa-solid fa-leaf"></i>
+              <span>Veggie Banger</span>
+            </div>
+            <h3 class="font-display font-black text-lg text-white">Crispy Avocado & Paneer Taco</h3>
+            <p class="text-xs text-gray-400 mt-1 line-clamp-2">Tempura spiced cottage paneer, mashed hass avocado, chipotle cream drizzle.</p>
+          </div>
+          <div class="mt-5 pt-3 border-t border-brand-border flex items-center justify-between">
+            <span class="font-display font-black text-xl text-white">₹279</span>
+            <button onclick="addToCart('Crispy Avocado Taco', 279, '🥑')" class="p-2.5 rounded-xl bg-brand-card hover:bg-brand-orange text-white border border-brand-border hover:border-brand-orange active:scale-90 transition-all">
+              <i class="fa-solid fa-plus text-xs"></i>
+            </button>
+          </div>
+        </div>
+
+        <!-- Item 6: Fries -->
+        <div class="menu-item glass-card rounded-2xl p-5 flex flex-col justify-between" data-category="fries">
+          <div>
+            <div class="relative h-44 rounded-xl bg-gradient-to-tr from-[#251E14] to-[#342410] flex items-center justify-center text-7xl mb-4 overflow-hidden group">
+              <span class="group-hover:scale-125 transition-transform duration-300">🧇</span>
+              <span class="absolute top-2 left-2 text-[10px] font-black uppercase px-2 py-0.5 rounded bg-brand-orange text-white font-extrabold">Extra Crisp</span>
+              <span class="absolute bottom-2 right-2 text-[10px] font-bold text-gray-400 bg-black/60 px-2 py-0.5 rounded">11 Min prep</span>
+            </div>
+            <div class="flex items-center gap-1.5 text-xs text-brand-orange font-bold mb-1">
+              <i class="fa-solid fa-layer-group"></i>
+              <span>Parmesan Truffle</span>
+            </div>
+            <h3 class="font-display font-black text-lg text-white">Truffle Waffle Criss-Cross</h3>
+            <p class="text-xs text-gray-400 mt-1 line-clamp-2">Lattice cut waffle fries showered in white truffle oil, shaved aged parm, rosemary salt.</p>
+          </div>
+          <div class="mt-5 pt-3 border-t border-brand-border flex items-center justify-between">
+            <span class="font-display font-black text-xl text-white">₹249</span>
+            <button onclick="addToCart('Truffle Waffle Fries', 249, '🧇')" class="p-2.5 rounded-xl bg-brand-card hover:bg-brand-orange text-white border border-brand-border hover:border-brand-orange active:scale-90 transition-all">
+              <i class="fa-solid fa-plus text-xs"></i>
+            </button>
+          </div>
+        </div>
+
+        <!-- Item 7: Shakes -->
+        <div class="menu-item glass-card rounded-2xl p-5 flex flex-col justify-between" data-category="shakes">
+          <div>
+            <div class="relative h-44 rounded-xl bg-gradient-to-tr from-[#241424] to-[#3A1838] flex items-center justify-center text-7xl mb-4 overflow-hidden group">
+              <span class="group-hover:scale-125 transition-transform duration-300">🥤</span>
+              <span class="absolute top-2 left-2 text-[10px] font-black uppercase px-2 py-0.5 rounded bg-purple-500 text-white font-extrabold">Ultra Thick</span>
+              <span class="absolute bottom-2 right-2 text-[10px] font-bold text-gray-400 bg-black/60 px-2 py-0.5 rounded">5 Min prep</span>
+            </div>
+            <div class="flex items-center gap-1.5 text-xs text-purple-400 font-bold mb-1">
+              <i class="fa-solid fa-ice-cream"></i>
+              <span>Heavy Cream</span>
+            </div>
+            <h3 class="font-display font-black text-lg text-white">Salted Caramel Lotus Shake</h3>
+            <p class="text-xs text-gray-400 mt-1 line-clamp-2">Biscoff cookie crumble, slow buttered toffee ribbon, Madagascar vanilla base.</p>
+          </div>
+          <div class="mt-5 pt-3 border-t border-brand-border flex items-center justify-between">
+            <span class="font-display font-black text-xl text-white">₹220</span>
+            <button onclick="addToCart('Salted Lotus Shake', 220, '🥤')" class="p-2.5 rounded-xl bg-brand-card hover:bg-brand-orange text-white border border-brand-border hover:border-brand-orange active:scale-90 transition-all">
+              <i class="fa-solid fa-plus text-xs"></i>
+            </button>
+          </div>
+        </div>
+
+        <!-- Item 8: Shakes -->
+        <div class="menu-item glass-card rounded-2xl p-5 flex flex-col justify-between" data-category="shakes">
+          <div>
+            <div class="relative h-44 rounded-xl bg-gradient-to-tr from-[#12231A] to-[#123624] flex items-center justify-center text-7xl mb-4 overflow-hidden group">
+              <span class="group-hover:scale-125 transition-transform duration-300">🍋</span>
+              <span class="absolute top-2 left-2 text-[10px] font-black uppercase px-2 py-0.5 rounded bg-brand-lime text-black font-extrabold">Cold Refresh</span>
+              <span class="absolute bottom-2 right-2 text-[10px] font-bold text-gray-400 bg-black/60 px-2 py-0.5 rounded">3 Min prep</span>
+            </div>
+            <div class="flex items-center gap-1.5 text-xs text-brand-lime font-bold mb-1">
+              <i class="fa-solid fa-glass-water"></i>
+              <span>Sparkling Refresher</span>
+            </div>
+            <h3 class="font-display font-black text-lg text-white">Yuzu Fizzy Jalapeno Lemonade</h3>
+            <p class="text-xs text-gray-400 mt-1 line-clamp-2">Crisp bubbly yuzu citrus infused with a mild slap of candied spicy jalapeno.</p>
+          </div>
+          <div class="mt-5 pt-3 border-t border-brand-border flex items-center justify-between">
+            <span class="font-display font-black text-xl text-white">₹160</span>
+            <button onclick="addToCart('Yuzu Jalapeno Fizz', 160, '🍋')" class="p-2.5 rounded-xl bg-brand-card hover:bg-brand-orange text-white border border-brand-border hover:border-brand-orange active:scale-90 transition-all">
+              <i class="fa-solid fa-plus text-xs"></i>
+            </button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- INTERACTIVE 'BUILD YOUR CRAVE BOX' SECTION -->
+  <section id="cravebox" class="py-20 bg-brand-card/30 border-y border-brand-border/80 relative">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <div class="text-center max-w-2xl mx-auto mb-12">
+        <span class="px-3.5 py-1 rounded-full bg-brand-lime/10 border border-brand-lime/30 text-brand-lime text-xs font-black uppercase tracking-wider">
+          Custom Munch Engine
+        </span>
+        <h2 class="font-display font-black text-3xl sm:text-5xl text-white mt-3">
+          BUILD YOUR CRAVE BOX.
+        </h2>
+        <p class="text-gray-400 text-sm mt-2">
+          Mix your base, dial in your spice meter, and lock in an instant 15% combo rebate.
+        </p>
+      </div>
+
+      <div class="glass-card rounded-3xl p-6 sm:p-10 border-brand-border">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+          
+          <!-- Builder Controls -->
+          <div class="lg:col-span-7 space-y-6">
+            
+            <!-- Step 1: Base -->
+            <div>
+              <label class="block text-xs font-extrabold uppercase tracking-wider text-gray-400 mb-3">
+                1. Choose Main Heavy Hitter
+              </label>
+              <div class="grid grid-cols-3 gap-3">
+                <button onclick="selectBuilderBase('Smash Burger', 260, this)" class="builder-base-btn p-3 rounded-2xl bg-brand-card border-2 border-brand-orange text-center transition-all">
+                  <div class="text-2xl mb-1">🍔</div>
+                  <div class="font-extrabold text-xs text-white">Smash Bun</div>
+                </button>
+                <button onclick="selectBuilderBase('Crispy Taco Trio', 280, this)" class="builder-base-btn p-3 rounded-2xl bg-brand-card border-2 border-transparent hover:border-gray-600 text-center transition-all">
+                  <div class="text-2xl mb-1">🌮</div>
+                  <div class="font-extrabold text-xs text-white">Taco Trio</div>
+                </button>
+                <button onclick="selectBuilderBase('Loaded Tender Box', 290, this)" class="builder-base-btn p-3 rounded-2xl bg-brand-card border-2 border-transparent hover:border-gray-600 text-center transition-all">
+                  <div class="text-2xl mb-1">🍗</div>
+                  <div class="font-extrabold text-xs text-white">Hot Tenders</div>
+                </button>
+              </div>
+            </div>
+
+            <!-- Step 2: Flavor / Heat Slider -->
+            <div>
+              <div class="flex justify-between items-center mb-2">
+                <label class="text-xs font-extrabold uppercase tracking-wider text-gray-400">
+                  2. Dial The Heat Meter
+                </label>
+                <span id="spice-label" class="text-xs font-extrabold text-brand-orange">Mild Zing 🌶️</span>
+              </div>
+              <input type="range" id="heat-slider" min="1" max="4" value="2" oninput="updateHeat(this.value)" class="w-full accent-brand-orange h-2 bg-gray-700 rounded-lg cursor-pointer">
+              <div class="flex justify-between text-[11px] font-bold text-gray-500 mt-1">
+                <span>Mild</span>
+                <span>Zesty</span>
+                <span>Inferno 🔥</span>
+                <span>Nuke 💀</span>
+              </div>
+            </div>
+
+            <!-- Step 3: Add Sides -->
+            <div>
+              <label class="block text-xs font-extrabold uppercase tracking-wider text-gray-400 mb-3">
+                3. Bolt-on Sides
+              </label>
+              <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                <label class="flex items-center gap-2.5 p-3 rounded-xl bg-brand-card border border-brand-border cursor-pointer hover:border-brand-lime transition-all">
+                  <input type="checkbox" onchange="toggleSide('Waffle Fries', 80, this)" class="rounded accent-brand-lime">
+                  <span class="text-xs font-bold text-gray-300">Waffle Fries (+₹80)</span>
+                </label>
+                <label class="flex items-center gap-2.5 p-3 rounded-xl bg-brand-card border border-brand-border cursor-pointer hover:border-brand-lime transition-all">
+                  <input type="checkbox" onchange="toggleSide('Cheese Dip', 40, this)" class="rounded accent-brand-lime">
+                  <span class="text-xs font-bold text-gray-300">Lava Dip (+₹40)</span>
+                </label>
+                <label class="flex items-center gap-2.5 p-3 rounded-xl bg-brand-card border border-brand-border cursor-pointer hover:border-brand-lime transition-all">
+                  <input type="checkbox" onchange="toggleSide('Cold Coke', 50, this)" class="rounded accent-brand-lime">
+                  <span class="text-xs font-bold text-gray-300">Chilled Coke (+₹50)</span>
+                </label>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Live Box Summary Card -->
+          <div class="lg:col-span-5 bg-black/60 rounded-2xl p-6 border border-brand-border flex flex-col justify-between">
+            <div>
+              <div class="flex items-center justify-between pb-3 border-b border-brand-border">
+                <span class="text-xs font-black uppercase text-brand-lime tracking-widest">Live Combo Spec</span>
+                <span class="px-2 py-0.5 rounded bg-brand-lime/20 text-brand-lime text-[10px] font-black uppercase">15% SAVED</span>
+              </div>
+
+              <div class="mt-4 space-y-3">
+                <div class="flex justify-between items-center text-sm">
+                  <span id="box-base-name" class="font-extrabold text-white">Smash Bun Base</span>
+                  <span id="box-base-price" class="text-gray-400 font-bold">₹260</span>
+                </div>
+                <div class="flex justify-between items-center text-sm">
+                  <span class="text-gray-400 font-medium">Heat Level</span>
+                  <span id="box-heat-val" class="font-bold text-brand-orange">Zesty (+0)</span>
+                </div>
+                <div id="box-sides-container" class="text-xs text-gray-400 space-y-1">
+                  <!-- Dynamic sides -->
+                </div>
+              </div>
+            </div>
+
+            <div class="mt-8 pt-4 border-t border-brand-border">
+              <div class="flex justify-between items-baseline mb-4">
+                <div>
+                  <span class="text-xs text-gray-400 block">Total Crave Box Price</span>
+                  <span id="box-total-price" class="font-display font-black text-3xl text-brand-orange">₹260</span>
+                </div>
+                <div class="text-right">
+                  <span class="text-[11px] text-brand-lime font-bold">Prep Est: 14 mins</span>
+                </div>
+              </div>
+
+              <button onclick="addBoxToCart()" class="w-full py-3.5 rounded-xl bg-gradient-to-r from-brand-orange to-brand-flame text-white font-black text-sm uppercase tracking-wider flex items-center justify-center gap-2 hover:shadow-lg hover:shadow-brand-orange/30 active:scale-95 transition-all">
+                <i class="fa-solid fa-box-open"></i>
+                <span>Drop Box in Cart</span>
+              </button>
+            </div>
+
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- HYPE & REVIEWS SECTION -->
+  <section id="hype" class="py-20 md:py-28 relative">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <div class="text-center max-w-xl mx-auto mb-16">
+        <span class="text-brand-orange text-xs font-black tracking-widest uppercase">Verified Munch Addicts</span>
+        <h2 class="font-display font-black text-3xl sm:text-5xl text-white mt-2">REAL REVIEWS. ZERO CAP.</h2>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        
+        <!-- Review 1 -->
+        <div class="glass-card rounded-2xl p-6 flex flex-col justify-between">
+          <div>
+            <div class="flex text-brand-yellow text-sm gap-1 mb-3">
+              <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+            </div>
+            <p class="text-gray-300 text-sm italic font-medium">
+              "Bro the Ghost Chili smash burger arrived in 17 minutes flat and the bun wasn't soggy at all. Crust on the wagyu was crunchy as hell."
+            </p>
+          </div>
+          <div class="mt-6 pt-4 border-t border-brand-border flex items-center gap-3">
+            <div class="w-10 h-10 rounded-full bg-brand-orange/20 text-brand-orange flex items-center justify-center font-extrabold text-sm">
+              AK
+            </div>
+            <div>
+              <p class="font-extrabold text-white text-sm">Aman Kapoor</p>
+              <p class="text-[11px] text-gray-500">Rohini Sector 9 • Ordered 24 times</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Review 2 -->
+        <div class="glass-card rounded-2xl p-6 flex flex-col justify-between border-brand-orange/30">
+          <div>
+            <div class="flex text-brand-yellow text-sm gap-1 mb-3">
+              <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+            </div>
+            <p class="text-gray-300 text-sm italic font-medium">
+              "Birria taco consommé is literally crack. I dip the waffle fries into it too. Mast bnaya yaar, perfectly crispy."
+            </p>
+          </div>
+          <div class="mt-6 pt-4 border-t border-brand-border flex items-center gap-3">
+            <div class="w-10 h-10 rounded-full bg-brand-lime/20 text-brand-lime flex items-center justify-center font-extrabold text-sm">
+              SM
+            </div>
+            <div>
+              <p class="font-extrabold text-white text-sm">Sanya Mehta</p>
+              <p class="text-[11px] text-gray-500">Food Blogger • 4AM Craver</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Review 3 -->
+        <div class="glass-card rounded-2xl p-6 flex flex-col justify-between">
+          <div>
+            <div class="flex text-brand-yellow text-sm gap-1 mb-3">
+              <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+            </div>
+            <p class="text-gray-300 text-sm italic font-medium">
+              "Salted caramel lotus shake was thick enough to stand a straw straight. Best late-night drop when you're grinding code."
+            </p>
+          </div>
+          <div class="mt-6 pt-4 border-t border-brand-border flex items-center gap-3">
+            <div class="w-10 h-10 rounded-full bg-purple-500/20 text-purple-400 flex items-center justify-center font-extrabold text-sm">
+              RV
+            </div>
+            <div>
+              <p class="font-extrabold text-white text-sm">Rohan Varma</p>
+              <p class="text-[11px] text-gray-500">Cyber City Gurgaon • Night Owl</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- LATE NIGHT DELIVERY STRIP -->
+  <section id="hours" class="py-16 bg-gradient-to-r from-brand-flame to-brand-orange text-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-8">
+      <div>
+        <span class="px-3 py-1 rounded-full bg-black text-white text-xs font-black uppercase">Open Till 4:00 AM</span>
+        <h3 class="font-display font-black text-3xl sm:text-4xl mt-2">MIDNIGHT CRAVINGS HIT?</h3>
+        <p class="text-white/80 text-sm mt-1">Order right now and get hot & crispy deliveries in sealed heat-retaining boxes.</p>
+      </div>
+      <div class="flex items-center gap-4">
+        <a href="#menu" class="px-8 py-4 rounded-xl bg-black text-white font-black text-sm uppercase tracking-wider hover:bg-neutral-900 active:scale-95 transition-all shadow-xl">
+          Order 15-Min Rush
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="pt-16 pb-12 bg-black border-t border-brand-border text-gray-400 text-sm">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-10 pb-12 border-b border-brand-border/60">
+        
+        <!-- Col 1 -->
+        <div class="space-y-4">
+          <div class="flex items-center gap-2">
+            <div class="w-8 h-8 rounded-lg bg-brand-orange flex items-center justify-center font-black text-white">⚡</div>
+            <span class="font-display font-black text-2xl tracking-tighter text-white">CRAVE.</span>
+          </div>
+          <p class="text-xs text-gray-500">
+            High-octane smash burgers, crispy tacos, and late-night munchies engineered for maximum crunch.
+          </p>
+          <div class="flex gap-3 text-lg text-gray-400">
+            <a href="#" class="w-8 h-8 rounded-lg bg-brand-card flex items-center justify-center hover:text-brand-orange hover:border-brand-orange border border-brand-border transition-all"><i class="fa-brands fa-instagram"></i></a>
+            <a href="#" class="w-8 h-8 rounded-lg bg-brand-card flex items-center justify-center hover:text-brand-orange hover:border-brand-orange border border-brand-border transition-all"><i class="fa-brands fa-x-twitter"></i></a>
+            <a href="#" class="w-8 h-8 rounded-lg bg-brand-card flex items-center justify-center hover:text-brand-orange hover:border-brand-orange border border-brand-border transition-all"><i class="fa-brands fa-tiktok"></i></a>
+          </div>
+        </div>
+
+        <!-- Col 2 -->
+        <div>
+          <h4 class="font-extrabold text-white text-xs uppercase tracking-wider mb-4">Fast Links</h4>
+          <ul class="space-y-2.5 text-xs">
+            <li><a href="#menu" class="hover:text-brand-orange transition-colors">Bestseller Platter</a></li>
+            <li><a href="#cravebox" class="hover:text-brand-orange transition-colors">Build Custom Box</a></li>
+            <li><a href="#hype" class="hover:text-brand-orange transition-colors">Customer Wall of Crunch</a></li>
+            <li><a href="#" class="hover:text-brand-orange transition-colors">Franchise & Dark Kitchens</a></li>
+          </ul>
+        </div>
+
+        <!-- Col 3 -->
+        <div>
+          <h4 class="font-extrabold text-white text-xs uppercase tracking-wider mb-4">Kitchen Spots</h4>
+          <ul class="space-y-2 text-xs text-gray-500">
+            <li>📍 Rohini Sector 9, Delhi (Hub 01)</li>
+            <li>📍 DLF Cyber City, Gurgaon (Hub 02)</li>
+            <li>📍 Koramangala 4th Block, Bengaluru (Hub 03)</li>
+            <li class="pt-2 text-brand-lime font-bold">⚡ All locations delivering 11 AM - 4 AM</li>
+          </ul>
+        </div>
+
+        <!-- Col 4 -->
+        <div>
+          <h4 class="font-extrabold text-white text-xs uppercase tracking-wider mb-4">Secret Menu Drops</h4>
+          <p class="text-xs text-gray-500 mb-3">Subscribe to score 30% off limited drop codes on weekends.</p>
+          <div class="flex gap-2">
+            <input type="email" placeholder="Drop your email..." class="w-full bg-brand-card px-3.5 py-2.5 rounded-xl border border-brand-border text-xs text-white focus:outline-none focus:border-brand-orange">
+            <button onclick="subscribeNews()" class="px-4 py-2.5 rounded-xl bg-brand-orange text-white font-extrabold text-xs uppercase hover:bg-brand-flame transition-all">Join</button>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="pt-8 flex flex-col sm:flex-row items-center justify-between text-xs text-gray-600 gap-4">
+        <p>© 2026 CRAVE Hospitality Group. All rights reserved. Made with spicy sauce.</p>
+        <div class="flex gap-6">
+          <a href="#" class="hover:text-gray-400">Privacy Policy</a>
+          <a href="#" class="hover:text-gray-400">Terms of Crunch</a>
+          <a href="#" class="hover:text-gray-400">Food Safety ISO 22000</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- SCRIPT LOGIC (CART, BOX BUILDER, INTERACTIONS) -->
+  <script>
+    // CART STATE
+    let cart = [];
+    
+    // CRAVE BOX STATE
+    let boxState = {
+      base: 'Smash Burger',
+      basePrice: 260,
+      heatName: 'Zesty',
+      sides: []
+    };
+
+    // Filter Menu Tab items
+    function filterMenu(category, btnElement) {
+      document.querySelectorAll('.menu-tab').forEach(b => {
+        b.classList.remove('bg-brand-orange', 'text-white', 'border-brand-orange');
+        b.classList.add('bg-brand-card', 'text-gray-300', 'border-brand-border');
+      });
+      btnElement.classList.remove('bg-brand-card', 'text-gray-300', 'border-brand-border');
+      btnElement.classList.add('bg-brand-orange', 'text-white', 'border-brand-orange');
+
+      const items = document.querySelectorAll('.menu-item');
+      items.forEach(item => {
+        if (category === 'all' || item.getAttribute('data-category') === category) {
+          item.style.display = 'flex';
+        } else {
+          item.style.display = 'none';
+        }
+      });
+    }
+
+    // Toast helper
+    function showToast(message) {
+      const toast = document.getElementById('toast');
+      const msg = document.getElementById('toast-msg');
+      msg.innerText = message;
+      toast.classList.remove('translate-y-24', 'opacity-0');
+      toast.classList.add('translate-y-0', 'opacity-100');
+      
+      setTimeout(() => {
+        toast.classList.remove('translate-y-0', 'opacity-100');
+        toast.classList.add('translate-y-24', 'opacity-0');
+      }, 2200);
+    }
+
+    // Toggle Cart Drawer
+    function toggleCart() {
+      const drawer = document.getElementById('cart-drawer');
+      const overlay = document.getElementById('cart-drawer-overlay');
+      
+      const isOpen = !drawer.classList.contains('translate-x-full');
+      if (isOpen) {
+        drawer.classList.add('translate-x-full');
+        overlay.classList.add('hidden', 'opacity-0');
+      } else {
+        drawer.classList.remove('translate-x-full');
+        overlay.classList.remove('hidden');
+        setTimeout(() => overlay.classList.remove('opacity-0'), 10);
+      }
+    }
+
+    // Add Item to Cart
+    function addToCart(title, price, emoji = '🔥') {
+      const existing = cart.find(item => item.title === title);
+      if (existing) {
+        existing.qty += 1;
+      } else {
+        cart.push({ title, price, emoji, qty: 1 });
+      }
+      renderCart();
+      showToast(`${title} added to Munch Stack!`);
+    }
+
+    // Update quantity in cart
+    function updateQty(index, change) {
+      cart[index].qty += change;
+      if (cart[index].qty <= 0) {
+        cart.splice(index, 1);
+      }
+      renderCart();
+    }
+
+    // Render Cart HTML
+    function renderCart() {
+      const cartContainer = document.getElementById('cart-items');
+      const counter = document.getElementById('cart-counter');
+      const subtotalEl = document.getElementById('cart-subtotal');
+      const totalEl = document.getElementById('cart-total');
+
+      const totalCount = cart.reduce((acc, cur) => acc + cur.qty, 0);
+      counter.innerText = totalCount;
+
+      if (cart.length === 0) {
+        cartContainer.innerHTML = `
+          <div id="cart-empty" class="h-full flex flex-col items-center justify-center text-center text-gray-500 py-16">
+            <div class="text-6xl mb-4">🌮</div>
+            <p class="font-bold text-lg text-gray-400">Your bag is starving!</p>
+            <p class="text-xs text-gray-600 mt-1">Add some sizzling smash burgers or loaded tacos.</p>
+          </div>
+        `;
+        subtotalEl.innerText = '₹0';
+        totalEl.innerText = '₹0';
+        return;
+      }
+
+      let subtotal = 0;
+      cartContainer.innerHTML = cart.map((item, idx) => {
+        const itemTotal = item.price * item.qty;
+        subtotal += itemTotal;
+        return `
+          <div class="flex items-center justify-between p-3.5 rounded-xl bg-brand-card border border-brand-border">
+            <div class="flex items-center gap-3">
+              <span class="text-3xl">${item.emoji}</span>
+              <div>
+                <p class="font-bold text-sm text-white">${item.title}</p>
+                <p class="text-xs text-brand-orange font-bold">₹${item.price}</p>
+              </div>
+            </div>
+            <div class="flex items-center gap-2 bg-brand-dark px-2.5 py-1 rounded-lg border border-brand-border">
+              <button onclick="updateQty(${idx}, -1)" class="text-gray-400 hover:text-white px-1 font-bold">-</button>
+              <span class="text-xs font-black text-white px-1.5">${item.qty}</span>
+              <button onclick="updateQty(${idx}, 1)" class="text-gray-400 hover:text-white px-1 font-bold">+</button>
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      subtotalEl.innerText = `₹${subtotal}`;
+      totalEl.innerText = `₹${subtotal}`;
+    }
+
+    // BOX BUILDER LOGIC
+    function selectBuilderBase(name, price, element) {
+      document.querySelectorAll('.builder-base-btn').forEach(b => {
+        b.classList.remove('border-brand-orange');
+        b.classList.add('border-transparent');
+      });
+      element.classList.remove('border-transparent');
+      element.classList.add('border-brand-orange');
+
+      boxState.base = name;
+      boxState.basePrice = price;
+      document.getElementById('box-base-name').innerText = name + ' Base';
+      document.getElementById('box-base-price').innerText = `₹${price}`;
+      calcBoxTotal();
+    }
+
+    function updateHeat(val) {
+      const heatMap = {
+        '1': { label: 'Mild Zing 🌶️', name: 'Mild' },
+        '2': { label: 'Zesty Crunch 🌶️🌶️', name: 'Zesty' },
+        '3': { label: 'Inferno Heat 🔥', name: 'Inferno' },
+        '4': { label: 'Nuke Spice 💀🔥', name: 'Nuke' }
+      };
+      const sel = heatMap[val];
+      document.getElementById('spice-label').innerText = sel.label;
+      document.getElementById('box-heat-val').innerText = sel.name;
+    }
+
+    function toggleSide(sideName, sidePrice, checkbox) {
+      if (checkbox.checked) {
+        boxState.sides.push({ name: sideName, price: sidePrice });
+      } else {
+        boxState.sides = boxState.sides.filter(s => s.name !== sideName);
+      }
+      renderBoxSides();
+      calcBoxTotal();
+    }
+
+    function renderBoxSides() {
+      const container = document.getElementById('box-sides-container');
+      if (boxState.sides.length === 0) {
+        container.innerHTML = `<span class="text-gray-600 italic">No extra sides picked</span>`;
+        return;
+      }
+      container.innerHTML = boxState.sides.map(s => `
+        <div class="flex justify-between items-center">
+          <span>+ ${s.name}</span>
+          <span class="text-gray-300 font-bold">₹${s.price}</span>
+        </div>
+      `).join('');
+    }
+
+    function calcBoxTotal() {
+      const sidesTotal = boxState.sides.reduce((acc, cur) => acc + cur.price, 0);
+      const total = boxState.basePrice + sidesTotal;
+      document.getElementById('box-total-price').innerText = `₹${total}`;
+      return total;
+    }
+
+    function addBoxToCart() {
+      const total = calcBoxTotal();
+      const sidesDesc = boxState.sides.length > 0 ? ` (+${boxState.sides.map(s => s.name).join(', ')})` : '';
+      const boxTitle = `Custom Crave Box: ${boxState.base}${sidesDesc}`;
+      addToCart(boxTitle, total, '📦');
+      toggleCart();
+    }
+
+    // Checkout mock handler
+    function checkoutMock() {
+      if (cart.length === 0) {
+        showToast("Add some munchies first!");
+        return;
+      }
+      showToast("🚀 Order confirmed! Sizzling on the grill now!");
+      cart = [];
+      renderCart();
+      setTimeout(toggleCart, 1000);
+    }
+
+    // Newsletter mock handler
+    function subscribeNews() {
+      showToast("🎉 VIP Craver code 'CRUNCH30' unlocked!");
+    }
+  </script>
+</body>
+</html>
